@@ -77,31 +77,28 @@ const App: React.FC = () => {
 
   // --- Handlers: DB Storage ---
 
-  const saveToGoogleSheet = async (userData: UserData) => {
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzSVRd1Cn5Sx2UGi9Pk6BxWYLr0iKw5x2qA70MNd--w1kUJJ5Dz6GQrCzQnS3_2S-Hyhw/exec";
-    
-    const payload = {
-      id: userData.id,
-      name: userData.name,
-      mbti: `${userData.mbtiSelection.ei}${userData.mbtiSelection.ns}${userData.mbtiSelection.ft}${userData.mbtiSelection.jp}`,
-      interest: userData.interest,
-      alcoholScore: userData.alcoholScore,
-      officeSupply: userData.officeSupply,
-      timestamp: new Date(userData.timestamp).toISOString()
-    };
-
-    try {
-      await fetch(GAS_URL, {
-        method: "POST",
-        mode: "no-cors", // GAS POST를 위한 설정
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      console.log("DB 저장 시도 완료");
-    } catch (error) {
-      console.error("DB 저장 실패:", error);
-    }
-  };
+const saveToGoogleSheet = async (userData: UserData) => {
+  const GAS_URL = "방금_새로_배포한_URL";
+  
+  // URLSearchParams 방식을 사용하면 더 안정적으로 전송됩니다.
+  try {
+    await fetch(GAS_URL, {
+      method: "POST",
+      mode: "no-cors", 
+      headers: { "Content-Type": "text/plain" }, // JSON 대신 text로 우회
+      body: JSON.stringify({
+        id: userData.id,
+        name: userData.name,
+        mbti: `${userData.mbtiSelection.ei}${userData.mbtiSelection.ns}${userData.mbtiSelection.ft}${userData.mbtiSelection.jp}`,
+        interest: userData.interest,
+        alcoholScore: userData.alcoholScore,
+        officeSupply: userData.officeSupply
+      }),
+    });
+  } catch (error) {
+    console.error("전송 에러:", error);
+  }
+};
 
   // --- Handlers: Form Navigation ---
 
